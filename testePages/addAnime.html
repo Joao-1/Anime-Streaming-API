@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site de Anime</title>
+</head>
+<body>
+    <div>
+        <form action="http://localhost:3000/animes" enctype="multipart/form-data"   method="post">
+            <div>
+                Nome: <input type="text" name="name"/><br>
+                Descrição: <input type="text" name="description"/><br>
+                Categoria: <input type="text" name="category"/><br>
+                Tags: <input type="text" name="tags"/><br>
+                Author: <input type="text" name="author"/><br>
+                Estúdio: <input type="text" name="studio"/><br>
+                Diretor: <input type="text" name="director"/><br>
+                Ano de Lançamento: <input type="text" name="realeaseYear"/><br>
+            </div>
+            <div>
+              Capa: <input type="file" name="image" accept="image/*"/>
+            </div>
+            <input type="submit" value="Adicionar anime ao banco de dados" />
+          </form>
+          
+    </div>
+</body>
+</html>
