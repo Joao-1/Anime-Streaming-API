@@ -1,15 +1,13 @@
-import { Request, Response, NextFunction } from "express";
-import ApiError from '../helpers/ApiError';
-import logger from "../services/logger";
+import { NextFunction, Request, Response } from "express";
+import ApiError from "../helpers/ApiError";
 
-function errorMiddleware(error: ApiError, request: Request, response: Response, next: NextFunction) {
-    const status = error.status || 500;
-    const message = error.message || 'Something went wrong';
-    logger.error({
-        message,
-        status
-    });
-    response.status(status).json({ status, message, })
+const errorMiddleware = (error: ApiError, request: Request, response: Response, next: NextFunction) => {
+  const status = error.status || 500;
+  const message = error.message || "Something went wrong";
+  response.status(status).send({
+    status,
+    message,
+  });
 };
 
 export default errorMiddleware;

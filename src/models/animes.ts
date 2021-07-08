@@ -1,7 +1,18 @@
-import { Table, Column, Model, HasMany, AllowNull, DataType, Default, BelongsToMany, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
-import AnimeEpisodes from './animeEpisodes';
-import Tags from './tags';
-import Tags_animes from './tags_animes';
+import {
+  Table,
+  Column,
+  Model,
+  HasMany,
+  AllowNull,
+  DataType,
+  Default,
+  BelongsToMany,
+  PrimaryKey,
+  AutoIncrement,
+} from "sequelize-typescript";
+import AnimeEpisodes from "./animeEpisodes";
+import Tags from "./tags";
+import TagsAnimes from "./tags_animes";
 
 @Table
 class Animes extends Model {
@@ -15,7 +26,7 @@ class Animes extends Model {
   name!: string;
 
   @AllowNull(false)
-  @Column(DataType.TEXT({ length: 'long' }))
+  @Column(DataType.TEXT({ length: "long" }))
   description!: string;
 
   @Column
@@ -38,15 +49,15 @@ class Animes extends Model {
   @Column
   numberOfEpisodes!: number;
 
-  @Default('incomplete')
+  @Default("incomplete")
   @Column
   status!: string;
 
   @HasMany(() => AnimeEpisodes)
-  episodes!: AnimeEpisodes[]
+  episodes!: AnimeEpisodes[];
 
-  @BelongsToMany(() => Tags, () => Tags_animes)
-  tags!: Tags[]
+  @BelongsToMany(() => Tags, () => TagsAnimes)
+  tags!: Tags[];
 }
 
 export default Animes;

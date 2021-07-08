@@ -1,5 +1,11 @@
-import { Table, Column, Model, AllowNull, DataType, ForeignKey } from 'sequelize-typescript';
-import Animes from './animes';
+import {
+  Table,
+  Column,
+  Model,
+  AllowNull,
+  ForeignKey,
+} from "sequelize-typescript";
+import Animes from "./animes";
 
 @Table
 class AnimeEpisodes extends Model {
@@ -9,7 +15,7 @@ class AnimeEpisodes extends Model {
   @ForeignKey(() => Animes)
   @AllowNull(false)
   @Column
-  AnimeId!: number
+  AnimeId!: number;
 
   @AllowNull(false)
   @Column
