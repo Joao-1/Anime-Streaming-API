@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import ApiError from "../helpers/ApiError";
+import logger from "../logs/logger";
 
 const errorMiddleware = (error: ApiError, request: Request, response: Response, next: NextFunction) => {
-  const status = error.status || 500;
+  const { status } = error;
   const message = error.message || "Something went wrong";
-  response.status(status).send({
+  logger.error(message);
+  response.status(status).json({
     status,
     message,
   });

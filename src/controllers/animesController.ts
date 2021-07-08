@@ -1,10 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import path from "path";
+import Joi from "joi";
 import ApiError from "../helpers/ApiError";
-import verificationValues from "../helpers/verificationValues";
 import AnimesService from "../services/animesService";
-import moveFiles from "../helpers/moveFiles";
+// import logger from "../logs/logger";
+
+const animeDataVerify = Joi.object({
+  name: Joi.string().alphanum().replace(/( )+/g, " ").required(),
+  category: Joi.string().required(),
+  description: Joi.string().required(),
+  author: Joi.string().allow(""),
+  studio: Joi.string().allow(""),
+  director: Joi.string().allow(""),
+  realeaseYear: Joi.string().allow(""),
+  tags: Joi.array().items(Joi.string().allow("")),
+  image: Joi.string().required(),
+  imageType: Joi.string().valid("image/png"),
+});
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -19,38 +32,28 @@ const upload = multer({ storage }).single("image");
 class UploadAnime {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     upload(req, res, async () => {
-      const valueNull = verificationValues(req.body, ["name", "category", "description", "tags"]);
-      if (valueNull) return next(new ApiError(`${valueNull} not provided`, 412));
-      if (!req.file?.path) return next(new ApiError("Image not provided", 412));
-      if (req.file?.mimetype !== "image/png") return next(new ApiError("Unsupported image type", 406));
-
-      const { description, category, author, studio, director, realeaseYear, tags } = req.body;
-      const name = req.body.name.replace(/( )+/g, " ");
       try {
-        const anime = await new AnimesService().create({
-          name,
-          description,
-          category,
-          author,
-          studio,
-          director,
-          realeaseYear,
-          tags: tags.split(","),
-        });
-
-        const nameFormated: string = name.toLowerCase().replace(/\s/g, "_");
-
-        const pathAnime = await new AnimesService()
-          .createAnimeDirectory(category.toLowerCase(), nameFormated)
-          .catch((error) => {
-            new AnimesService().delete(anime!.id);
-            throw new ApiError(error.message || "Error creating anime directory", 500);
+        const { name, description, category, author, studio, director, realeaseYear, tags } = req.body;
+        const values = await animeDataVerify
+          .validateAsync({
+            name,
+            category,
+            description,
+            author,
+            studio,
+            director,
+            realeaseYear,
+            tags: tags.split(","),
+            image: req.file?.path,
+            imageType: req.file?.mimetype,
+          })
+          .catch((e) => {
+            throw new ApiError(e.message, 422);
           });
 
-        await moveFiles(req.file.path, `${pathAnime + nameFormated}Poster${path.extname(req.file.path)}`);
-
+        const anime = await new AnimesService().create(values);
         return res.status(201).json({
-          message: `Anime ${name} created successfully`,
+          message: `Anime ${values.name} created successfully`,
           id: anime?.id,
         });
       } catch (error) {

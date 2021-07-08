@@ -8,4 +8,6 @@ export interface IAnime {
   realeaseYear?: string;
   status?: string;
   tags: string[];
+  image: string;
+  imageType: string;
 }

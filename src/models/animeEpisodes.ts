@@ -1,10 +1,4 @@
-import {
-  Table,
-  Column,
-  Model,
-  AllowNull,
-  ForeignKey,
-} from "sequelize-typescript";
+import { Table, Column, Model, AllowNull, ForeignKey } from "sequelize-typescript";
 import Animes from "./animes";
 
 @Table

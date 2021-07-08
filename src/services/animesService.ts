@@ -1,6 +1,7 @@
 import fs from "fs";
 import util from "util";
 import ApiError from "../helpers/ApiError";
+import moveFiles from "../helpers/moveFiles";
 import Animes from "../models/animes";
 import Tags from "../models/tags";
 import AnimeRepository from "../repositories/animesRepository";
@@ -12,23 +13,27 @@ const mkdirPromise = util.promisify(fs.mkdir);
 class AnimeService {
   async create(animeData: IAnime): Promise<Animes | undefined> {
     try {
-      if (
-        await new AnimeRepository().checkWithNameIfAnimeExists(animeData.name)
-      ) {
+      if (await new AnimeRepository().checkWithNameIfAnimeExists(animeData.name)) {
         throw new ApiError("Anime already exists", 400);
       }
 
       const tags: Tags[] = await new TagsRepository().findAllTags();
       const tagsToAdd = [];
       for (const tag of tags) {
-        animeData.tags.includes(tag.nameTag) ? tagsToAdd.push(tag.id) : false;
+        if (animeData.tags.includes(tag.nameTag)) tagsToAdd.push(tag.id);
       }
 
       const newAnime = await new AnimeRepository().create(animeData);
-      await newAnime?.$add("tags", tagsToAdd);
+      await newAnime.$add("tags", tagsToAdd).catch((e) => {
+        newAnime.destroy();
+        throw new ApiError(e.message);
+      });
+
+      const path = await this.createAnimeDirectory(newAnime.category.toLowerCase(), newAnime.name, newAnime.id);
+      await moveFiles(animeData.image, path);
       return newAnime;
     } catch (error) {
-      throw new ApiError(error.message, error.status);
+      throw new ApiError(error.message, error?.status);
     }
   }
 
@@ -47,18 +52,12 @@ class AnimeService {
     }
   }
 
-  async updateAnime(
-    updateData: Record<string, string>,
-    animeId: string | number
-  ) {
+  async updateAnime(updateData: Record<string, string>, animeId: string | number) {
     try {
       if (!(await new AnimeRepository().checkWithIdIfAnimeExists(animeId))) {
         throw new ApiError("Anime doesnt exist", 400);
       }
-      const animeUpdated = await new AnimeRepository().updateAnime(
-        updateData,
-        animeId
-      );
+      const animeUpdated = await new AnimeRepository().updateAnime(updateData, animeId);
       return animeUpdated;
     } catch (error) {
       throw new ApiError(error.message, 500);
@@ -73,19 +72,18 @@ class AnimeService {
     }
   }
 
-  async createAnimeDirectory(category: string, animeName: string) {
+  async createAnimeDirectory(category: string, animeName: string, animeId: number) {
     try {
-      if (
-        !["josei", "kodomo", "seinen", "shoujo", "shounen"].includes(category)
-      ) {
+      if (!["josei", "kodomo", "seinen", "shoujo", "shounen"].includes(category)) {
         throw new ApiError("Category entered does not exist", 400);
       }
-      const path = `${process.cwd()}/animes/${category}/${animeName}`;
+      const path = `${process.cwd()}/animes/${category}/${animeId}[${animeName}]`;
       await mkdirPromise(path);
       await mkdirPromise(`${path}/episodes`);
       return `${path}/`;
     } catch (error) {
-      throw Error(error.message || "");
+      await this.delete(animeId);
+      throw new ApiError("It was not possible to create a new anime. Internal error.", 500);
     }
   }
 }

@@ -1,10 +1,4 @@
-import {
-  Table,
-  Column,
-  Model,
-  AllowNull,
-  BelongsToMany,
-} from "sequelize-typescript";
+import { Table, Column, Model, AllowNull, BelongsToMany } from "sequelize-typescript";
 import Animes from "./animes";
 import TagsAnimes from "./tags_animes";
 

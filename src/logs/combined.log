@@ -1,1 +1,9 @@
 {"level":"info","message":"Hello error","date":"2021-07-07T23:12:28.607Z"}
+{"message":{"animeName":"Horimiya","category":"shoujo","description":"Melhor anime forever","author":"Torako","studio":"Kyoto Animation","director":"Tatsuya Ishihara","realeaseYear":"2012","tags":"shoujo"},"level":"info","date":"2021-07-08T17:54:26.288Z"}
+{"message":"\"image\" is required","level":"error","date":"2021-07-08T20:01:27.115Z"}
+{"message":"relation \"TagsAnimes\" does not exist","level":"error","date":"2021-07-08T20:01:27.115Z"}
+{"message":"Anime already exists","level":"error","date":"2021-07-08T20:04:40.546Z"}
+{"message":"relation \"TagsAnimes\" does not exist","level":"error","date":"2021-07-08T20:10:06.237Z"}
+{"message":"relation \"TagsAnimes\" does not exist","level":"error","date":"2021-07-08T20:10:06.237Z"}
+{"message":"relation \"TagsAnimes\" does not exist","level":"error","date":"2021-07-08T20:18:44.423Z"}
+{"message":"relation \"Tags_Animes\" does not exist","level":"error","date":"2021-07-08T20:21:49.336Z"}

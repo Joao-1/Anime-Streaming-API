@@ -3,7 +3,7 @@ import Animes from "../models/animes";
 import { IAnime } from "../types/anime";
 
 class AnimeRepository {
-  async create(animeData: IAnime): Promise<Animes | undefined> {
+  async create(animeData: IAnime): Promise<Animes> {
     try {
       const anime = await Animes.create({
         name: animeData.name,
@@ -15,14 +15,11 @@ class AnimeRepository {
       });
       return anime;
     } catch (error) {
-      new ApiError("Error registering anime", 500);
+      throw new ApiError("Error registering anime", 500);
     }
   }
 
-  async updateAnime(
-    updateData: Record<string, string>,
-    animeId: string | number
-  ) {
+  async updateAnime(updateData: Record<string, string>, animeId: string | number) {
     try {
       const anime = await Animes.update(updateData, { where: { id: animeId } });
       return anime;
@@ -44,9 +41,7 @@ class AnimeRepository {
     }
   }
 
-  async checkWithIdIfAnimeExists(
-    animeId: string | number
-  ): Promise<Animes | false> {
+  async checkWithIdIfAnimeExists(animeId: string | number): Promise<Animes | false> {
     try {
       const animeExist = await Animes.findOne({ where: { id: animeId } });
       return animeExist || false;
