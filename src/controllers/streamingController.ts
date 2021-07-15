@@ -13,14 +13,9 @@ class StreamingAnime {
       validationValues(req.params, ["anime", "episode"]);
 
       const ep = parseInt(anime, 10);
-      if (!ep)
-        return next(
-          new ApiError("Id provided not compatible with expected.", 400)
-        );
+      if (!ep) return next(new ApiError("Id provided not compatible with expected.", 400));
 
-      const animeInfo = await new AnimeRepository().checkWithIdIfAnimeExists(
-        anime
-      );
+      const animeInfo = await new AnimeRepository().checkWithIdIfAnimeExists(anime);
 
       if (!animeInfo) {
         return next(new ApiError("Anime not found in database", 404));

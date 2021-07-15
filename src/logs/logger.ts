@@ -2,7 +2,12 @@ import winston from "winston";
 
 const logger = winston.createLogger({
   level: "info",
-  format: winston.format.json(),
+  format: winston.format.combine(
+    winston.format.json(),
+    winston.format.errors({ stack: true })
+  ),
+
+
   defaultMeta: { date: new Date() },
   transports: [
     new winston.transports.File({

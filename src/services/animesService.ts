@@ -17,6 +17,10 @@ class AnimeService {
         throw new ApiError("Anime already exists", 400);
       }
 
+      if (!["josei", "kodomo", "seinen", "shoujo", "shounen"].includes(animeData.category)) {
+        throw new ApiError("Category entered does not exist", 400);
+      }
+
       const tags: Tags[] = await new TagsRepository().findAllTags();
       const tagsToAdd = [];
       for (const tag of tags) {
@@ -47,7 +51,6 @@ class AnimeService {
       });
       return animesFromDb.rows;
     } catch (error) {
-      console.log(error);
       throw new ApiError("Internal error when searching for animes", 500);
     }
   }
@@ -74,16 +77,14 @@ class AnimeService {
 
   async createAnimeDirectory(category: string, animeName: string, animeId: number) {
     try {
-      if (!["josei", "kodomo", "seinen", "shoujo", "shounen"].includes(category)) {
-        throw new ApiError("Category entered does not exist", 400);
-      }
-      const path = `${process.cwd()}/animes/${category}/${animeId}[${animeName}]`;
+      const path = `${process.cwd()}/animes/${category}/${animeId}`;
       await mkdirPromise(path);
       await mkdirPromise(`${path}/episodes`);
       return `${path}/`;
     } catch (error) {
+      console.log(error);
       await this.delete(animeId);
-      throw new ApiError("It was not possible to create a new anime. Internal error.", 500);
+      throw new ApiError(error.message, error.code);
     }
   }
 }

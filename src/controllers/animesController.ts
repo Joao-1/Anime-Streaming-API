@@ -7,7 +7,7 @@ import AnimesService from "../services/animesService";
 // import logger from "../logs/logger";
 
 const animeDataVerify = Joi.object({
-  name: Joi.string().alphanum().replace(/( )+/g, " ").required(),
+  name: Joi.string().replace(/( )+/g, " ").required(),
   category: Joi.string().required(),
   description: Joi.string().required(),
   author: Joi.string().allow(""),

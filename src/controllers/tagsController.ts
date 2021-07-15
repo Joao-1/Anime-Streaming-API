@@ -4,6 +4,7 @@ import NewTag from "../services/tagsService";
 
 class AddTag {
   async create(req: Request, res: Response, next: NextFunction) {
+    // fazer com que seja possivel criar mais de uma tag de uma só vez
     if (!req.body.tag) {
       return next(new ApiError("New tag name not informed", 412));
     }
