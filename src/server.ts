@@ -1,6 +1,6 @@
-import "express-async-errors";
-import App from "./app";
-import config from "./config/config";
+import 'express-async-errors';
+import App from './app';
+import config from './config/config';
 
 const app = new App();
 

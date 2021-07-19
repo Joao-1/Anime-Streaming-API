@@ -18,7 +18,7 @@
   },
   "plugins": ["@typescript-eslint", "mocha", "security", "prettier"],
   "rules": { 
-    "prettier/prettier": ["error", {"printWidth": 120}], 
+    "prettier/prettier": ["error", { "singleQuote": true,"printWidth": 120, "endOfLine": "auto", "tabWidth": 4}], 
     "class-methods-use-this": "off", 
     "no-param-reassign": "off", 
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
