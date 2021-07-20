@@ -11,6 +11,4 @@ const createValidation = Joi.object({
     tags: Joi.string().allow(),
 });
 
-// const UploadAnime = Joi.object({});
-
 export default { createValidation };

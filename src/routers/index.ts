@@ -1,15 +1,10 @@
 import { Router } from 'express';
-import multer from 'multer';
 import StreamingAnime from '../controllers/streamingController';
 import Animes from '../controllers/animesController';
 import Tags from '../controllers/tagsController';
 import Episodes from '../controllers/episodesController';
 import validator from '../middlewares/SchemaValidator';
-import config from '../config/config';
-
-const storage = config.files;
-
-const upload = multer({ storage });
+import validateOneFile from '../middlewares/FileVelidator';
 
 const routes = Router();
 
@@ -22,13 +17,13 @@ const tags = new Tags();
 routes.post('/tags', tags.create);
 
 // animes
-routes.post('/animes', upload.single('image'), validator, animes.create);
+routes.post('/animes', validateOneFile('image', 'image/png'), validator, animes.create);
 routes.get('/animes', animes.read);
 routes.put('/animes/:id', animes.upload);
 routes.delete('/animes/:id', animes.delete);
 
 // episodes
-routes.post('/:anime/episodes', episodes.create);
+routes.post('/:anime/episodes', validateOneFile('episode', 'video/mp4'), episodes.create);
 
 // streaming
 routes.get('/watch/:anime/:episode', streamingAnime.create);

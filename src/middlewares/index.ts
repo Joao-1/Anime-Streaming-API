@@ -1,4 +1,4 @@
-import RateLimit from "./RateLimit";
-import RateSlow from "./RateSlow";
+import RateLimit from './RateLimit';
+import RateSlow from './RateSlow';
 
 export default [RateLimit, RateSlow];

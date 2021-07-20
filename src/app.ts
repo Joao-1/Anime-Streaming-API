@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import logger from 'morgan';
 import { Sequelize } from 'sequelize-typescript';
+import helmet from 'helmet';
 import Minddlewares from './middlewares/index';
 import config from './config/config';
 import routes from './routers';
@@ -27,6 +28,7 @@ class App {
         this.express.use(express.urlencoded({ extended: false }));
         this.express.use(express.json());
         this.express.use(cors(config.cors));
+        this.express.use(helmet());
         this.express.use(...Minddlewares);
     }
 
