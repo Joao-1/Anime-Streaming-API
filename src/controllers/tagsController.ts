@@ -8,12 +8,8 @@ class AddTag {
         if (!req.body.tag) {
             return next(new ApiError('New tag name not informed', 412));
         }
-        try {
-            const tag = await new NewTag().create(req.body.tag);
-            return res.status(201).json({ status: 'Sucess', message: `${tag} tag created successfully` });
-        } catch (error) {
-            return next(new ApiError(error.message, error.status));
-        }
+        const tag = await new NewTag().create(req.body.tag);
+        return res.status(201).json({ status: 'Sucess', message: `${tag.nameTag} tag created successfully` });
     }
 
     // async read(req: Request, res: Response, next: NextFunction): Promise<void> { }

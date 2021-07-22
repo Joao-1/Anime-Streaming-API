@@ -2,30 +2,25 @@ import ApiError from '../helpers/ApiError';
 import Tags from '../models/tags';
 
 class TagsRepository {
-    async create(tagName: string) {
-        try {
-            await Tags.create({ nameTag: tagName });
-        } catch (error) {
-            throw new ApiError('Error creating tag', 500);
-        }
+    async create(tagName: string): Promise<Tags> {
+        const tag = await Tags.create({ nameTag: tagName }).catch(() => {
+            throw new ApiError('Error creating tag in database', 500);
+        });
+        return tag;
     }
 
-    async findAllTags() {
-        try {
-            return await Tags.findAll();
-        } catch (error) {
-            throw new ApiError('Error looking for tags', 500);
-        }
+    async findAllTags(): Promise<Tags[]> {
+        const tags = await Tags.findAll().catch(() => {
+            throw new ApiError('Error looking for tags in database', 500);
+        });
+        return tags;
     }
 
     async checkTagExist(name: string): Promise<boolean> {
-        try {
-            const animeExist = await Tags.findOne({ where: { nameTag: name } });
-            return !!animeExist;
-        } catch (error) {
-            console.log(error);
-            throw new ApiError('error checking if tags exist on server', 500);
-        }
+        const animeExist = await Tags.findOne({ where: { nameTag: name } }).catch(() => {
+            throw new ApiError('Error checking if tags exist in database', 500);
+        });
+        return !!animeExist;
     }
 }
 

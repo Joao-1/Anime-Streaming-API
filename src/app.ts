@@ -7,7 +7,7 @@ import Minddlewares from './middlewares/index';
 import config from './config/config';
 import routes from './routers';
 import errorMiddleware from './middlewares/ApiErrorHandler';
-
+// C:\Program Files\PostgreSQL\13\bin>pg_ctl -D "C:\Program Files\PostgreSQL\13\data" start
 class App {
     express: express.Application;
 
@@ -19,7 +19,11 @@ class App {
     }
 
     public start(): express.Application {
-        console.log(`App starting at http://localhost:${config.app.port}`);
+        console.log(`
+        ################################################
+                 Server listening on port: ${config.app.port} 
+        ################################################
+        `);
         return this.express;
     }
 

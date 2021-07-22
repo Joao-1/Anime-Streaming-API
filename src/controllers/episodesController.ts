@@ -9,23 +9,20 @@ class UploadEpAnime {
     async create(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { name, postAuthor } = req.body;
         // VERIFICAR SE ESSE MEMBRO TEM PERMISSAO DE FAZER ISSO
-        try {
-            const anime = await new EpisodesServices().create({
-                anime: req.params.animes,
-                name,
-                postAuthor: postAuthor || 1,
-            });
-            const newPath = `${process.cwd()}/animes/${anime.category}/${anime.name
-                .toLowerCase()
-                .replace(/\s/g, '_')}/episodes/`;
-            await moveFiles(
-                req.file!.path,
-                `${newPath}episodes${anime.numberOfEpisodes}${path.extname(req.file!.path)}`
-            );
-            res.status(201).json('Ep adicionado com sucesso porra');
-        } catch (error) {
-            return next(new ApiError(error.message, error.status));
-        }
+        const anime = await new EpisodesServices().create({
+            anime: req.params.anime,
+            name,
+            postAuthor: postAuthor || 1,
+        });
+
+        const newPath = `${process.cwd()}/animes/${anime.category}/${anime.id}/episodes/`;
+        await moveFiles(
+            req.file!.path,
+            `${newPath}episodes${anime.numberOfEpisodes}${path.extname(req.file!.path)}`
+        ).catch(() => {
+            throw new ApiError('Error moving new episode to anime directory');
+        });
+        res.status(201).json('Ep adicionado com sucesso porra');
     }
 
     // async read(req: Request, res: Response, next: NextFunction): Promise<void> { }
