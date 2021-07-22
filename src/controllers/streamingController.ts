@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import { promisify } from 'util';
 import ApiError from '../helpers/ApiError';
-// import validationValues from '../helpers/verificationValues';
 import StreamingService from '../services/streamingService';
 
 class StreamingAnime {

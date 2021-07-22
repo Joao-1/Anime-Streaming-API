@@ -9,6 +9,7 @@ const supportedMethods = ['post', 'put', 'delete '];
 export default (req: Request, res: Response, next: NextFunction) => {
     const method = req.method.toLowerCase();
     const route = `${req.route.path}/${method}`;
+    console.log(route);
     if (_.includes(supportedMethods, method) && _.has(Schemas, route)) {
         const schema: Schema = _.get(Schemas, route);
         if (schema) {

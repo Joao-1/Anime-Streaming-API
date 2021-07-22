@@ -13,7 +13,6 @@ class EpisodesServices {
     }
 
     async create(episodeData: Record<string, string>) {
-        console.log(episodeData.anime);
         const anime = await this.animeRepository.checkWithIdIfAnimeExists(episodeData.anime);
         if (!anime) {
             throw new ApiError('There is no anime with the given id', 400);

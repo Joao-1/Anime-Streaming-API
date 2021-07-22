@@ -7,6 +7,7 @@ export default {
     '/animes/post': animeDataVerify.createValidation,
     // Rota de episódios
     '/:anime/episodes/post': episodeDataVerify.createEpisodeValidation,
+    '/:anime/episodes/get': episodeDataVerify.getEpisodeValidationQuery,
     // Rota de tags
     '/tags/post': tagsDataVerify.createTagValidation,
 };

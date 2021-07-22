@@ -5,4 +5,8 @@ const createEpisodeValidation = Joi.object({
     // author: Joi.string().guid({ version: ['uuidv4'] }),
 });
 
-export default { createEpisodeValidation };
+const getEpisodeValidationQuery = Joi.object({
+    episodes: Joi.array().items(Joi.number().allow('')),
+});
+
+export default { createEpisodeValidation, getEpisodeValidationQuery };

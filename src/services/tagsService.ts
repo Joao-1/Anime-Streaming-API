@@ -3,11 +3,17 @@ import Tags from '../models/tags';
 import TagsRepository from '../repositories/tagsRepository';
 
 class tagsServices {
+    tagsRepository: TagsRepository;
+
+    constructor() {
+        this.tagsRepository = new TagsRepository();
+    }
+
     async create(tagName: string): Promise<Tags> {
-        if (await new TagsRepository().checkTagExist(tagName)) {
+        if (await this.tagsRepository.checkTagExist(tagName)) {
             throw new ApiError('Tag already exists', 400);
         }
-        const tag = new TagsRepository().create(tagName);
+        const tag = this.tagsRepository.create(tagName);
         return tag;
     }
 }
