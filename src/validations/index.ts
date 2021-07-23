@@ -8,6 +8,8 @@ export default {
     // Rota de episódios
     '/:anime/episodes/post': episodeDataVerify.createEpisodeValidation,
     '/:anime/episodes/get': episodeDataVerify.getEpisodeValidationQuery,
+    '/:anime/episodes/put': episodeDataVerify.putEpisodeValidationQuery,
+    '/:anime/episodes/delete': episodeDataVerify.deleteEpisodeValidationQuery,
     // Rota de tags
     '/tags/post': tagsDataVerify.createTagValidation,
 };

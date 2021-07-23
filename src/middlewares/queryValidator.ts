@@ -3,7 +3,7 @@ import { Schema } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 import Schemas from '../validations';
 
-const supportedMethods = ['get'];
+const supportedMethods = ['get', 'put', 'delete'];
 
 // eslint-disable-next-line consistent-return
 export default (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +18,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
                     status: 'failed',
                     error: {
                         details: _.map(error.details, ({ message, type }) => ({
-                            message: message.replace(/['"]/g, ''),
+                            message: `Query Params:${message.replace(/['"]/g, '')}`,
                             type,
                         })),
                     },

@@ -17,14 +17,14 @@ class AnimeRepository {
         return anime;
     }
 
-    async updateAnime(updateData: Record<string, string>, animeId: string | number): Promise<[number, Animes[]]> {
+    async updateAnime(updateData: Record<string, string>, animeId: number): Promise<[number, Animes[]]> {
         const anime = await Animes.update(updateData, { where: { id: animeId } }).catch(() => {
             throw new ApiError('Error updating an anime in the database', 500);
         });
         return anime;
     }
 
-    async deleteAnime(animeId: string | number): Promise<void> {
+    async deleteAnime(animeId: number): Promise<void> {
         await Animes.destroy({
             where: {
                 id: animeId,
@@ -34,12 +34,11 @@ class AnimeRepository {
         });
     }
 
-    async checkWithIdIfAnimeExists(animeId: string | number): Promise<Animes | false> {
-        const animeExist = await Animes.findOne({ where: { id: animeId } }).catch((e) => {
-            console.log(e);
+    async checkWithIdIfAnimeExists(animeId: string | number): Promise<Animes | null> {
+        const animeExist = await Animes.findOne({ where: { id: animeId } }).catch(() => {
             throw new ApiError('Error looking for a new anime by id in database', 500);
         });
-        return animeExist || false;
+        return animeExist;
     }
 
     async checkWithNameIfAnimeExists(animeName: string): Promise<Animes | false> {

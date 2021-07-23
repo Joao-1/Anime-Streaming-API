@@ -24,7 +24,7 @@ class UploadAnime {
 
     async upload(req: Request, res: Response, next: NextFunction) {
         const idAnime = req.params.id;
-        if (!idAnime) return next(new ApiError('Id not provied', 422));
+        if (!idAnime) throw new ApiError('Id not provied', 422);
         const animeUpdated = await new AnimesService().updateAnime(req.body, idAnime);
         if (!animeUpdated[0]) throw new ApiError('No fields were found. Check if the syntax is correct', 202);
         return res.status(200).json({ message: 'Fields successfully updated' });

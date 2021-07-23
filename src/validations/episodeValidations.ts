@@ -9,4 +9,17 @@ const getEpisodeValidationQuery = Joi.object({
     episodes: Joi.array().items(Joi.number().allow('')),
 });
 
-export default { createEpisodeValidation, getEpisodeValidationQuery };
+const putEpisodeValidationQuery = Joi.object({
+    episode: Joi.number().required(),
+});
+
+const deleteEpisodeValidationQuery = Joi.object({
+    episodes: Joi.array().items(Joi.number()),
+});
+
+export default {
+    createEpisodeValidation,
+    getEpisodeValidationQuery,
+    putEpisodeValidationQuery,
+    deleteEpisodeValidationQuery,
+};

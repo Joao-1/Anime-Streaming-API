@@ -26,6 +26,8 @@ routes.delete('/animes/:id', animes.delete);
 // episodes
 routes.post('/:anime/episodes', validateOneFile('episode', 'video/mp4'), episodes.create);
 routes.get('/:anime/episodes', queryValidator, episodes.read);
+routes.put('/:anime/episodes', queryValidator, episodes.upload);
+routes.delete('/:anime/episodes', queryValidator, episodes.delete);
 
 // streaming
 routes.get('/watch/:anime/:episode', streamingAnime.create);

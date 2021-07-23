@@ -55,16 +55,21 @@ class AnimeService {
     }
 
     async updateAnime(updateData: Record<string, string>, animeId: string | number) {
-        if (!(await this.animeRepository.checkWithIdIfAnimeExists(animeId))) {
+        const anime = await this.animeRepository.checkWithIdIfAnimeExists(animeId);
+        if (!anime) {
             throw new ApiError('Anime doesnt exist', 400);
         }
 
-        const animeUpdated = await this.animeRepository.updateAnime(updateData, animeId);
+        const animeUpdated = await this.animeRepository.updateAnime(updateData, anime.id);
         return animeUpdated;
     }
 
-    async delete(animeData: string | number): Promise<void> {
-        const animeDeleted = this.animeRepository.deleteAnime(animeData);
+    async delete(animeId: string | number): Promise<void> {
+        const anime = await this.animeRepository.checkWithIdIfAnimeExists(animeId);
+        if (!anime) {
+            throw new ApiError('Anime doesnt exist', 400);
+        }
+        const animeDeleted = this.animeRepository.deleteAnime(anime.id);
         return animeDeleted;
     }
 
