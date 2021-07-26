@@ -13,11 +13,11 @@ class AnimeEpisodes extends Model {
 
     @AllowNull(false)
     @Column
-    numberEpisode!: number;
+    episode!: number;
 
     @AllowNull
     @Column
-    postAuthor!: string;
+    author!: string;
 }
 
 export default AnimeEpisodes;

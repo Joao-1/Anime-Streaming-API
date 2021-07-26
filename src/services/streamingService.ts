@@ -1,6 +1,6 @@
 // import ApiError from '../helpers/ApiError';
-
 import ApiError from '../helpers/ApiError';
+import Animes from '../models/animes';
 import AnimeRepository from '../repositories/animesRepository';
 
 class StreamingService {
@@ -10,17 +10,13 @@ class StreamingService {
         this.animeRepository = new AnimeRepository();
     }
 
-    async checkData(animeId: number, episode: number) {
-        const animeInfo = await this.animeRepository.checkWithIdIfAnimeExists(animeId);
+    async checkData(animeId: number, episode: number): Promise<Animes> {
+        const anime = await this.animeRepository.getAnime(animeId);
 
-        if (!animeInfo) {
-            throw new ApiError('Anime not found in database', 404);
-        }
-
-        if (episode > animeInfo.numberOfEpisodes) {
+        if (episode > anime.numberOfEpisodes) {
             throw new ApiError('Provided episode does not exist', 404);
         }
-        return animeInfo;
+        return anime;
     }
 }
 

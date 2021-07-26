@@ -3,7 +3,7 @@ import Tags from '../models/tags';
 
 class TagsRepository {
     async create(tagName: string): Promise<Tags> {
-        const tag = await Tags.create({ nameTag: tagName }).catch(() => {
+        const tag = await Tags.create({ name: tagName }).catch(() => {
             throw new ApiError('Error creating tag in database', 500);
         });
         return tag;
@@ -16,11 +16,12 @@ class TagsRepository {
         return tags;
     }
 
-    async checkTagExist(name: string): Promise<boolean> {
-        const animeExist = await Tags.findOne({ where: { nameTag: name } }).catch(() => {
+    async checkTagExistWithName(name: string): Promise<boolean> {
+        const tag = await Tags.findOne({ where: { name } }).catch(() => {
             throw new ApiError('Error checking if tags exist in database', 500);
         });
-        return !!animeExist;
+
+        return !!tag;
     }
 }
 

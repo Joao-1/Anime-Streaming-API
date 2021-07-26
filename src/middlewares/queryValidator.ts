@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Schema } from 'joi';
 import { Request, Response, NextFunction } from 'express';
-import Schemas from '../validations';
+import Schemas from '../validations/queryValidation';
 
 const supportedMethods = ['get', 'put', 'delete'];
 

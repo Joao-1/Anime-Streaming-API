@@ -20,7 +20,7 @@ class AnimeService {
         this.tagsRepository = new TagsRepository();
     }
 
-    async create(animeData: IAnime): Promise<Animes | undefined> {
+    async create(animeData: IAnime): Promise<Animes> {
         if (await this.animeRepository.checkWithNameIfAnimeExists(animeData.name)) {
             throw new ApiError('Anime already exists', 400);
         }
@@ -29,10 +29,10 @@ class AnimeService {
             throw new ApiError('Category entered does not exist', 400);
         }
 
-        const tags: Tags[] = await this.tagsRepository.findAllTags();
+        const tagsFromDb: Tags[] = await this.tagsRepository.findAllTags();
         const tagsToAdd = [];
-        for (const tag of tags) {
-            if (animeData.tags.includes(tag.nameTag)) tagsToAdd.push(tag.id);
+        for (const tag of tagsFromDb) {
+            if (animeData.tags.includes(tag.name)) tagsToAdd.push(tag.id);
         }
 
         const newAnime = await this.animeRepository.create(animeData);
@@ -42,33 +42,27 @@ class AnimeService {
             await this.createAnimeDirectory(newAnime.category.toLowerCase(), newAnime.name, newAnime.id);
             // await moveFiles(animeData.image, path);
         } catch (error) {
-            newAnime.destroy();
+            await newAnime.destroy();
             throw new ApiError(error.message);
         }
+
         return newAnime;
     }
 
     async getAnimes(offset: number, limit: number) {
         if (offset === 1) offset = 0;
-        const values = this.animeRepository.getWithPagination(offset, limit);
-        return values;
+        const animes = this.animeRepository.getWithPagination(offset, limit);
+        return animes;
     }
 
-    async updateAnime(updateData: Record<string, string>, animeId: string | number) {
-        const anime = await this.animeRepository.checkWithIdIfAnimeExists(animeId);
-        if (!anime) {
-            throw new ApiError('Anime doesnt exist', 400);
-        }
-
+    async updateAnime(updateData: Record<string, string>, animeId: number) {
+        const anime = await this.animeRepository.getAnime(animeId);
         const animeUpdated = await this.animeRepository.updateAnime(updateData, anime.id);
         return animeUpdated;
     }
 
-    async delete(animeId: string | number): Promise<void> {
-        const anime = await this.animeRepository.checkWithIdIfAnimeExists(animeId);
-        if (!anime) {
-            throw new ApiError('Anime doesnt exist', 400);
-        }
+    async delete(animeId: number): Promise<void> {
+        const anime = await this.animeRepository.getAnime(animeId);
         const animeDeleted = this.animeRepository.deleteAnime(anime.id);
         return animeDeleted;
     }

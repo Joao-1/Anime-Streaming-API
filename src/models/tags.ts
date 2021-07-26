@@ -6,7 +6,7 @@ import TagsAnimes from "./tags_animes";
 class Tags extends Model {
   @AllowNull(false)
   @Column
-  nameTag!: string;
+  name!: string;
 
   @BelongsToMany(() => Animes, () => TagsAnimes)
   episodes!: Animes[];

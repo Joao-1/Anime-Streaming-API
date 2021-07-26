@@ -20,11 +20,11 @@ module.exports = {
             name: {
                 type: Sequelize.STRING,
             },
-            numberEpisode: {
+            episode: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            postAuthor: {
+            author: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },

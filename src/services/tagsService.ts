@@ -10,7 +10,7 @@ class tagsServices {
     }
 
     async create(tagName: string): Promise<Tags> {
-        if (await this.tagsRepository.checkTagExist(tagName)) {
+        if (await this.tagsRepository.checkTagExistWithName(tagName)) {
             throw new ApiError('Tag already exists', 400);
         }
         const tag = this.tagsRepository.create(tagName);

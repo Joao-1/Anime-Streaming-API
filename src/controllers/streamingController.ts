@@ -7,15 +7,17 @@ import StreamingService from '../services/streamingService';
 class StreamingAnime {
     // eslint-disable-next-line consistent-return
     async create(req: Request, res: Response, next: NextFunction) {
-        const { anime, episode } = req.params;
+        const anime = req.params.anime as unknown as number;
+        const episode = req.params.episode as unknown as number;
 
-        const animeDb = await new StreamingService().checkData(parseInt(anime, 10), parseInt(episode, 10));
+        const animeDb = await new StreamingService().checkData(anime, episode);
 
         const path = `${process.cwd()}/animes/${animeDb.category}/${animeDb.id}/episodes/episodes${episode}.mp4`;
 
         const stat = await promisify(fs.stat)(path).catch(() => {
             throw new ApiError('Could not find directory for episode');
         });
+
         const fileSize = stat.size;
         const { range } = req.headers;
 

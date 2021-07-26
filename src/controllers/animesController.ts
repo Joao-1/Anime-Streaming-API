@@ -1,41 +1,36 @@
 import { Request, Response, NextFunction } from 'express';
 import ApiError from '../helpers/ApiError';
-import AnimesService from '../services/animesService';
+import AnimeService from '../services/animesService';
 // import logger from "../logs/logger";
 
-class UploadAnime {
+class Animes {
     async create(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const anime = await new AnimesService().create(req.body);
+        const newAnime = await new AnimeService().create(req.body);
         res.status(201).json({
             message: `Anime ${req.body.name} created successfully`,
-            id: anime?.id,
+            id: newAnime.id,
         });
     }
 
     async read(req: Request, res: Response, next: NextFunction) {
-        const offset: number | undefined = parseInt(req.query.offset?.toString() || '1', 10);
-        const limit: number | undefined = parseInt(req.query.limit?.toString() || '100', 10);
-
-        if (!offset || !limit) return next(new ApiError('The paging parameters must be numbers', 400));
-
-        const animes = await new AnimesService().getAnimes(offset, limit);
+        const offset = req.query.offset as unknown as number;
+        const limit = req.query.limit as unknown as number;
+        const animes = await new AnimeService().getAnimes(offset || 1, limit || 100);
         return res.status(200).json(animes);
     }
 
     async upload(req: Request, res: Response, next: NextFunction) {
-        const idAnime = req.params.id;
-        if (!idAnime) throw new ApiError('Id not provied', 422);
-        const animeUpdated = await new AnimesService().updateAnime(req.body, idAnime);
+        const idAnime = req.params.id as unknown as number;
+        const animeUpdated = await new AnimeService().updateAnime(req.body, idAnime);
         if (!animeUpdated[0]) throw new ApiError('No fields were found. Check if the syntax is correct', 202);
-        return res.status(200).json({ message: 'Fields successfully updated' });
+        return res.status(204).json({ message: 'Fields successfully updated' });
     }
 
     async delete(req: Request, res: Response, next: NextFunction) {
-        const idAnime = req.params.id;
-        if (!idAnime) return next(new ApiError('Id not provied', 400));
-        await new AnimesService().delete(idAnime);
+        const idAnime = req.params.id as unknown as number;
+        await new AnimeService().delete(idAnime);
         return res.status(200).json({ message: 'Anime successfully deleted' });
     }
 }
 
-export default UploadAnime;
+export default Animes;

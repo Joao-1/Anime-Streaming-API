@@ -7,7 +7,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      nameTag: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING,
       },

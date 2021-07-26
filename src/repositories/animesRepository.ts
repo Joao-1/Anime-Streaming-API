@@ -34,18 +34,22 @@ class AnimeRepository {
         });
     }
 
-    async checkWithIdIfAnimeExists(animeId: string | number): Promise<Animes | null> {
-        const animeExist = await Animes.findOne({ where: { id: animeId } }).catch(() => {
+    async getAnime(animeId: number): Promise<Animes> {
+        const anime = await Animes.findOne({ where: { id: animeId } }).catch((e) => {
+            console.log(e);
             throw new ApiError('Error looking for a new anime by id in database', 500);
         });
-        return animeExist;
+        if (!anime) {
+            throw new ApiError('Anime doesnt exist', 400);
+        }
+        return anime;
     }
 
-    async checkWithNameIfAnimeExists(animeName: string): Promise<Animes | false> {
-        const animeExist = await Animes.findOne({ where: { name: animeName } }).catch(() => {
+    async checkWithNameIfAnimeExists(animeName: string): Promise<Animes | null> {
+        const anime = await Animes.findOne({ where: { name: animeName } }).catch(() => {
             throw new ApiError('Error checking if an anime exists by id in database', 500);
         });
-        return animeExist || false;
+        return anime;
     }
 
     async getWithPagination(offset: number, limit: number) {

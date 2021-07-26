@@ -4,6 +4,7 @@ import Animes from '../controllers/animesController';
 import Tags from '../controllers/tagsController';
 import Episodes from '../controllers/episodesController';
 import bodyValidator from '../middlewares/bodyValidator';
+import paramsValidator from '../middlewares/paramsValidator';
 import queryValidator from '../middlewares/queryValidator';
 import validateOneFile from '../middlewares/FileVelidator';
 
@@ -13,21 +14,20 @@ const streamingAnime = new StreamingAnime();
 const animes = new Animes();
 const episodes = new Episodes();
 const tags = new Tags();
-
 // tags
-routes.post('/tags', tags.create);
+routes.post('/tags', bodyValidator, tags.create);
 
 // animes
 routes.post('/animes', validateOneFile('image', 'image/png'), bodyValidator, animes.create);
-routes.get('/animes', animes.read);
-routes.put('/animes/:id', animes.upload);
-routes.delete('/animes/:id', animes.delete);
+routes.get('/animes', queryValidator, animes.read);
+routes.put('/animes/:id', paramsValidator, animes.upload);
+routes.delete('/animes/:id', paramsValidator, animes.delete);
 
 // episodes
 routes.post('/:anime/episodes', validateOneFile('episode', 'video/mp4'), episodes.create);
-routes.get('/:anime/episodes', queryValidator, episodes.read);
-routes.put('/:anime/episodes', queryValidator, episodes.upload);
-routes.delete('/:anime/episodes', queryValidator, episodes.delete);
+routes.get('/:anime/episodes', paramsValidator, queryValidator, episodes.read);
+routes.put('/:anime/episodes/:id', paramsValidator, queryValidator, episodes.upload);
+routes.delete('/:anime/episodes/:id', paramsValidator, queryValidator, episodes.delete);
 
 // streaming
 routes.get('/watch/:anime/:episode', streamingAnime.create);
