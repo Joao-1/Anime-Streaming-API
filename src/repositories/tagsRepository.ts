@@ -23,6 +23,19 @@ class TagsRepository {
 
         return !!tag;
     }
+
+    async updateTag(tagName: string, newName: string): Promise<[number, Tags[]]> {
+        const tag = await Tags.update({ name: newName }, { where: { name: tagName } }).catch(() => {
+            throw new ApiError('error when trying to update a new tag', 500);
+        });
+        return tag;
+    }
+
+    async deleteTag(tagName: string): Promise<void> {
+        await Tags.destroy({ where: { name: tagName } }).catch(() => {
+            throw new ApiError('error when trying to delete an tag', 500);
+        });
+    }
 }
 
 export default TagsRepository;

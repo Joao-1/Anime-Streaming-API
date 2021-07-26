@@ -5,4 +5,8 @@ const postTagValidationBody = Joi.object({
     // author: Joi.string().guid({ version: ['uuidv4'] }),
 });
 
-export default { postTagValidationBody };
+const uploadTagValidationBody = Joi.object({
+    name: Joi.string().required(),
+});
+
+export default { postTagValidationBody, uploadTagValidationBody };

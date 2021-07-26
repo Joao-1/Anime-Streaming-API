@@ -29,7 +29,7 @@ class Animes {
     async delete(req: Request, res: Response, next: NextFunction) {
         const idAnime = req.params.id as unknown as number;
         await new AnimeService().delete(idAnime);
-        return res.status(200).json({ message: 'Anime successfully deleted' });
+        return res.status(204).json({ message: 'Anime successfully deleted' });
     }
 }
 

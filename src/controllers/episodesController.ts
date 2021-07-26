@@ -31,14 +31,14 @@ class Epidodes {
         const episodeId = req.params.id as unknown as number;
         const eps = await new EpisodesServices().updateEp(req.body, animeId, episodeId);
         if (!eps[0]) throw new ApiError('No fields were found. Check if the syntax is correct', 202);
-        res.status(200).json({ status: 'sucess', message: 'Episode updated successfully' });
+        res.status(204).json({ status: 'sucess', message: 'Episode updated successfully' });
     }
 
     async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
         const animeId = req.params.anime as unknown as number;
         const episodeId = req.params.id as unknown as number;
         await new EpisodesServices().delete(animeId, episodeId);
-        res.status(200).json({ status: 'sucess', message: 'Anime successfully deleted' });
+        res.status(204).json({ status: 'sucess', message: 'Anime successfully deleted' });
     }
 }
 

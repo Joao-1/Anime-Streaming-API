@@ -9,4 +9,5 @@ export default {
     // '/:anime/episodes/post': episodeDataVerify.postEpisodeValidationBody,
     // Rota de tags
     '/tags/post': tagsDataVerify.postTagValidationBody,
+    '/tags/put': tagsDataVerify.uploadTagValidationBody,
 };

@@ -16,7 +16,9 @@ const episodes = new Episodes();
 const tags = new Tags();
 // tags
 routes.post('/tags', bodyValidator, tags.create);
-
+routes.get('/tags', tags.read);
+routes.put('/tags/:name', paramsValidator, bodyValidator, tags.upload);
+routes.delete('/tags/:name', tags.delete);
 // animes
 routes.post('/animes', validateOneFile('image', 'image/png'), bodyValidator, animes.create);
 routes.get('/animes', queryValidator, animes.read);
